@@ -3,63 +3,64 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreUniversityRequest;
+use App\Http\Requests\Admin\UpdateUniversityRequest;
+use App\Models\University;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UniversityController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $universities = University::paginate(10);
+        return view('admin.universities.index', compact('universities'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.universities.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreUniversityRequest $request)
     {
-        //
+        $data = $request->validated();
+        if ($request->hasFile('logo')) {
+            $data['logo_path'] = $request->file('logo')->store('universities', 'public');
+        }
+        University::create($data);
+        return redirect()->route('admin.universities.index')->with('success', 'University created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(University $university)
     {
-        //
+        return view('admin.universities.show', compact('university'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(University $university)
     {
-        //
+        return view('admin.universities.edit', compact('university'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(UpdateUniversityRequest $request, University $university)
     {
-        //
+        $data = $request->validated();
+        if ($request->hasFile('logo')) {
+            if ($university->logo_path) {
+                Storage::delete($university->logo_path);
+            }
+            $data['logo_path'] = $request->file('logo')->store('universities', 'public');
+        }
+        $university->update($data);
+        return redirect()->route('admin.universities.index')->with('success', 'University updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(University $university)
     {
-        //
+        if ($university->logo_path) {
+            Storage::delete($university->logo_path);
+        }
+        $university->delete();
+        return redirect()->route('admin.universities.index')->with('success', 'University deleted successfully.');
     }
 }

@@ -93,6 +93,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->text('message');
             $table->foreignId('university_id')->nullable()->constrained()->onDelete('set null');
+           
             $table->enum('status', ['pending', 'contacted', 'closed'])->default('pending');
             $table->timestamps();
             $table->index('email');

@@ -3,63 +3,67 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreCollegeRequest;
+use App\Http\Requests\Admin\UpdateCollegeRequest;
+use App\Models\College;
+use App\Models\University;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CollegeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $colleges = College::paginate(10);
+        return view('admin.colleges.index', compact('colleges'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $universities = University::all();
+        return view('admin.colleges.create', compact('universities'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreCollegeRequest $request)
     {
-        //
+        $data = $request->validated();
+        if ($request->hasFile('logo')) {
+            $data['logo_path'] = $request->file('logo')->store('colleges', 'public');
+        }
+        College::create($data);
+        return redirect()->route('admin.colleges.index')->with('success', 'College created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(College $college)
     {
-        //
+        return view('admin.colleges.show', compact('college'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(College $college)
     {
-        //
+        $universities = University::all();
+        return view('admin.colleges.edit', compact('college', 'universities'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(UpdateCollegeRequest $request, College $college)
     {
-        //
+        $data = $request->validated();
+        if ($request->hasFile('logo')) {
+            if ($college->logo_path) {
+                Storage::delete($college->logo_path);
+            }
+            $data['logo_path'] = $request->file('logo')->store('colleges', 'public');
+        }
+        $college->update($data);
+        return redirect()->route('admin.colleges.index')->with('success', 'College updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(College $college)
     {
-        //
+        if ($college->logo_path) {
+            Storage::delete($college->logo_path);
+        }
+        $college->delete();
+        return redirect()->route('admin.colleges.index')->with('success', 'College deleted successfully.');
     }
 }

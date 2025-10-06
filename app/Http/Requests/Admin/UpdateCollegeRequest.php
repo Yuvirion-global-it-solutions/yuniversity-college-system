@@ -6,23 +6,21 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCollegeRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    public function authorize()
     {
-        return false;
+        return true; // Only authenticated admins can update colleges
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
+    public function rules()
     {
         return [
-            //
+            'university_id' => ['required', 'exists:universities,id'],
+            'name' => ['required', 'string', 'max:255', 'unique:colleges,name,' . $this->college->id],
+            'description' => ['required', 'string'],
+            'tagline' => ['required', 'string', 'max:255'],
+            'facilities' => ['nullable', 'array'],
+            'facilities.*' => ['string', 'max:255'],
+            'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ];
     }
 }

@@ -3,63 +3,64 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreCMSRequest;
+use App\Http\Requests\Admin\UpdateCMSRequest;
+use App\Models\CMS;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CMSController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $cms = CMS::paginate(10);
+        return view('admin.cms.index', compact('cms'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.cms.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreCMSRequest $request)
     {
-        //
+        $data = $request->validated();
+        if ($request->hasFile('image')) {
+            $data['image_path'] = $request->file('image')->store('cms', 'public');
+        }
+        CMS::create($data);
+        return redirect()->route('admin.cms.index')->with('success', 'Content created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(CMS $cm)
     {
-        //
+        return view('admin.cms.show', compact('cm'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(CMS $cm)
     {
-        //
+        return view('admin.cms.edit', compact('cm'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(UpdateCMSRequest $request, CMS $cm)
     {
-        //
+        $data = $request->validated();
+        if ($request->hasFile('image')) {
+            if ($cm->image_path) {
+                Storage::delete($cm->image_path);
+            }
+            $data['image_path'] = $request->file('image')->store('cms', 'public');
+        }
+        $cm->update($data);
+        return redirect()->route('admin.cms.index')->with('success', 'Content updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(CMS $cm)
     {
-        //
+        if ($cm->image_path) {
+            Storage::delete($cm->image_path);
+        }
+        $cm->delete();
+        return redirect()->route('admin.cms.index')->with('success', 'Content deleted successfully.');
     }
 }
