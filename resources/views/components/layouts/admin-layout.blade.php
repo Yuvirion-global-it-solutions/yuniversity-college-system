@@ -259,7 +259,7 @@
     <a class="nav-link {{ Route::is('admin.universities.*') ? 'active' : '' }} animate-slide-in" href="{{ route('admin.universities.index') }}">Universities</a>
     <a class="nav-link {{ Route::is('admin.colleges.*') ? 'active' : '' }} animate-slide-in" href="{{ route('admin.colleges.index') }}">Colleges</a>
     <a class="nav-link {{ Route::is('admin.courses.*') ? 'active' : '' }} animate-slide-in" href="{{ route('admin.courses.index') }}">Courses</a>
-    <a class="nav-link {{ Route::is('admin.students.*') ? 'active' : '' }} animate-slide-in" href="{{ route('admin.students.index') }}">Students</a>
+    <!-- <a class="nav-link {{ Route::is('admin.students.*') ? 'active' : '' }} animate-slide-in" href="{{ route('admin.students.index') }}">Students</a> -->
     <a class="nav-link {{ Route::is('admin.cms.*') ? 'active' : '' }} animate-slide-in" href="{{ route('admin.cms.index') }}">CMS</a>
     <a class="nav-link {{ Route::is('admin.enquiries.*') ? 'active' : '' }} animate-slide-in" href="{{ route('admin.enquiries.index') }}">Enquiries</a>
     <a class="nav-link {{ Route::is('admin.settings.*') ? 'active' : '' }} animate-slide-in" href="{{ route('admin.settings.index') }}">Settings</a>

@@ -19,6 +19,8 @@ class CourseController extends Controller
         return view('admin.courses.index', compact('courses'));
     }
 
+    
+
     public function create()
     {
         $universities = University::all();
@@ -35,11 +37,12 @@ class CourseController extends Controller
         Course::create($data);
         return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
     }
-
-    public function show(Course $course)
+ public function show(Course $course)
     {
-        return view('admin.courses.show', compact('course'));
+        $students = $course->students()->paginate(5); // Paginate 5 students per page
+        return view('admin.courses.show', compact('course', 'students'));
     }
+
 
     public function edit(Course $course)
     {
