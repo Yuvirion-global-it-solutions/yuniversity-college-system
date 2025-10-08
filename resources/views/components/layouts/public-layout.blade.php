@@ -253,43 +253,65 @@
 <body>
     <div class="d-flex flex-column min-vh-100">
         <!-- Header -->
-        <header>
-            <nav class="navbar navbar-expand-md">
-                <div class="container">
-                    <a href="{{ route('public.home') }}" class="navbar-brand animate-slide-in">
-                        <svg class="logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8z"/>
-                        </svg>
-                        <span class="fs-4 fw-bold" style="color: var(--primary);">EduConnect</span>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                        </svg>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <div class="d-md-flex flex-grow-1 justify-content-center mx-md-4">
-                            <div class="search-container d-none d-md-block">
-                                <input type="text" placeholder="Search universities, colleges, courses..." aria-label="Search">
-                                <button>
-                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item"><a href="{{ route('public.home') }}" class="nav-link animate-slide-in">Home</a></li>
-                            <li class="nav-item"><a href="{{ route('public.universities.index') }}" class="nav-link animate-slide-in delay-100">Universities</a></li>
-                            <li class="nav-item"><a href="{{ route('public.colleges.index') }}" class="nav-link animate-slide-in delay-100">Colleges</a></li>
-                            <li class="nav-item"><a href="{{ route('public.courses.index') }}" class="nav-link animate-slide-in delay-100">Courses</a></li>
-                            <li class="nav-item"><a href="{{ route('public.contact.create') }}" class="nav-link animate-slide-in delay-100">Contact</a></li>
-                            <li class="nav-item"><a href="{{ route('public.enquiry.create') }}" class="btn btn-apply animate-slide-in delay-200">Apply Now</a></li>
-                        </ul>
+      <header>
+    <nav class="navbar navbar-expand-md">
+        <div class="container">
+            <a href="{{ route('public.home') }}" class="navbar-brand animate-slide-in">
+                <svg class="logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8z"/>
+                </svg>
+                <span class="fs-4 fw-bold" style="color: var(--primary);">EduConnect</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="d-md-flex flex-grow-1 justify-content-center mx-md-4">
+                    <div class="search-container d-none d-md-block">
+                        <input type="text" placeholder="Search universities, colleges, courses..." aria-label="Search">
+                        <button>
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </button>   
                     </div>
                 </div>
-            </nav>
-        </header>
+                <ul class="navbar-nav ms-auto" style="gap: 16px;">
+                    <li class="nav-item"><a href="{{ route('public.home') }}" class="nav-link animate-slide-in">Home</a></li>
+                    <li class="nav-item"><a href="{{ route('public.universities.index') }}" class="nav-link animate-slide-in delay-100">Universities</a></li>
+                    <li class="nav-item"><a href="{{ route('public.colleges.index') }}" class="nav-link animate-slide-in delay-100">Colleges</a></li>
+                    <li class="nav-item"><a href="{{ route('public.courses.index') }}" class="nav-link animate-slide-in delay-100">Courses</a></li>
+                    <li class="nav-item"><a href="{{ route('public.enquiry.create') }}" class="btn btn-apply animate-slide-in delay-200 blink-apply">Apply Now</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<style>
+    /* Blinking animation for Apply Now button */
+    @keyframes blink-apply {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.85; }
+    }
+
+    .blink-apply {
+        animation: blink-apply 2s ease-in-out infinite;
+    }
+
+    /* Adjust navbar item spacing for mobile */
+    @media (max-width: 767px) {
+        .navbar-nav {
+            gap: 8px;
+            padding: 16px;
+        }
+        .navbar-nav .nav-link, .navbar-nav .btn-apply {
+            padding: 8px 0;
+        }
+    }
+</style>
 
         <!-- Main Content -->
         <main class="flex-grow-1">

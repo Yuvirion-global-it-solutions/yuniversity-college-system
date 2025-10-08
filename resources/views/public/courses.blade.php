@@ -3,29 +3,75 @@
 @section('title', 'Courses - EduConnect')
 
 @section('content')
+
+   <!-- Search Section -->
+    <section class="py-5" style="background: linear-gradient(to bottom, var(--background-light), transparent);">
+        <div class="container" style="max-width: 1280px;">
+            <div class="position-relative animate-slide-in">
+                <svg class="position-absolute start-0 top-50 translate-middle-y" style="width: 20px; height: 20px; color: #6c757d;" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="search" placeholder="Search universities..." class="w-100 rounded-3 border border-secondary-subtle bg-white py-2 ps-5 pe-3 fs-6" style="transition: all 0.3s ease;" aria-label="Search for universities">
+            </div>
+        </div>
+    </section>
+
     <!-- Courses List -->
-    <section class="py-16 sm:py-20">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="mb-10 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">Explore Courses</h2>
-            <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+    <section class="py-5" style="background: linear-gradient(to bottom, var(--background-light), transparent);">
+        <div class="container" style="max-width: 1536px;">
+            <h2 class="fs-3 fs-sm-2 fw-bold text-primary text-center mb-4 animate-slide-in">Explore Courses</h2>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
                 @forelse ($courses as $course)
-                    <a href="{{ route('public.courses.show', ['slug' => $course->slug]) }}" class="group flex flex-col gap-4 overflow-hidden rounded-lg bg-white dark:bg-background-dark shadow-md transition-shadow hover:shadow-xl">
-                        <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden">
-                            <img alt="{{ $course->name }}" class="h-full w-full object-cover object-center transition-transform group-hover:scale-105" src="{{ $course->image_path ?: 'https://via.placeholder.com/300' }}">
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-bold text-gray-900 dark:text-white">{{ $course->name }}</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ $course->duration ?? 'Duration not available' }}</p>
+                    <a href="{{ route('public.courses.show', ['slug' => $course->slug]) }}" class="col text-decoration-none" aria-label="View details for {{ $course->name }}">
+                        <div class="card h-100 border-0 shadow-sm animate-slide-in" style="transition: all 0.3s ease;">
+                            <div class="ratio ratio-16x9 overflow-hidden rounded-top">
+                                <img alt="{{ $course->name }}" class="w-100 h-100 object-fit-cover" src="{{ $course->image_path ?: 'https://via.placeholder.com/400x225' }}" loading="lazy">
+                            </div>
+                            <div class="card-body p-3">
+                                <h3 class="fs-6 fw-semibold text-primary text-truncate">{{ $course->name }}</h3>
+                                <p class="fs-7 text-secondary text-truncate">{{ $course->duration ?? 'Duration not available' }}</p>
+                            </div>
                         </div>
                     </a>
                 @empty
-                    <p class="text-center text-gray-600 dark:text-gray-300">No courses available.</p>
+                    <p class="text-center fs-6 text-dark animate-slide-in" role="alert">No courses are currently available. Please check back later.</p>
                 @endforelse
             </div>
             <!-- Pagination -->
-            <div class="mt-8">
-                {{ $courses->links() }}
-            </div>
+            @if ($courses->hasPages())
+                <nav aria-label="Course pagination" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <!-- Previous Page Link -->
+                        @if ($courses->onFirstPage())
+                            <li class="page-item disabled">
+                                <span class="page-link">Previous</span>
+                            </li>
+                        @else
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $courses->previousPageUrl() }}" aria-label="Previous page">Previous</a>
+                            </li>
+                        @endif
+
+                        <!-- Pagination Links -->
+                        @foreach ($courses->getUrlRange(1, $courses->lastPage()) as $page => $url)
+                            <li class="page-item {{ $page == $courses->currentPage() ? 'active' : '' }}">
+                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                            </li>
+                        @endforeach
+
+                        <!-- Next Page Link -->
+                        @if ($courses->hasMorePages())
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $courses->nextPageUrl() }}" aria-label="Next page">Next</a>
+                            </li>
+                        @else
+                            <li class="page-item disabled">
+                                <span class="page-link">Next</span>
+                            </li>
+                        @endif
+                    </ul>
+                </nav>
+            @endif
         </div>
     </section>
 @endsection

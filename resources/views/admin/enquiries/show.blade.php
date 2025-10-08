@@ -9,7 +9,7 @@
             <div class="card shadow-sm animate-slide-in">
                 <div class="card-header bg-secondary text-dark d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">{{ $enquiry->name }}'s Enquiry</h4>
-                    <a href="{{ route('admin.enquiries.index') }}" class="btn btn-outline-secondary">Back to Enquiries</a>
+                    <a href="{{ route('admin.enquiries.index') }}" class="btn btn-primary">Back to Enquiries</a>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">

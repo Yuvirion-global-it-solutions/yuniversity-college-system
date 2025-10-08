@@ -20,18 +20,7 @@ class EnquiryController extends Controller
     {
         return view('admin.enquiries.show', compact('enquiry'));
     }
-
-    public function edit(Enquiry $enquiry)
-    {
-        $universities = University::all();
-        return view('admin.enquiries.edit', compact('enquiry', 'universities'));
-    }
-
-    public function update(UpdateEnquiryRequest $request, Enquiry $enquiry)
-    {
-        $enquiry->update($request->validated());
-        return redirect()->route('admin.enquiries.index')->with('success', 'Enquiry updated successfully.');
-    }
+ 
 
     public function destroy(Enquiry $enquiry)
     {
