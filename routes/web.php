@@ -1,14 +1,7 @@
 <?php
 
-use App\Http\Controllers\Public\HomeController;
-use App\Http\Controllers\Public\UniversityController;
-use App\Http\Controllers\Public\CollegeController;
-use App\Http\Controllers\Public\CourseController;
-use App\Http\Controllers\Public\EnquiryController;
-use App\Http\Controllers\Public\ContactController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Auth\LoginController;
-use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
-use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\UniversityController as AdminUniversityController;
@@ -20,16 +13,19 @@ use App\Http\Controllers\Admin\EnquiryController as AdminEnquiryController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\SupportController;
+use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
+use App\Http\Controllers\Admin\Auth\ResetPasswordController;
+use App\Http\Controllers\Public\HomeController;
+use App\Http\Controllers\Public\UniversityController;
+use App\Http\Controllers\Public\CollegeController;
+use App\Http\Controllers\Public\CourseController;
+use App\Http\Controllers\Public\EnquiryController;
+use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Api\HomeController as ApiHomeController;
-
-use Illuminate\Support\Facades\Route;
-
 
 Route::get('/home-data', [ApiHomeController::class, 'index']);
 
- 
-
-Route::get('/welcome',function(){
+Route::get('/welcome', function () {
     return "hello";
 });
 
@@ -49,11 +45,12 @@ Route::prefix('public')->name('public.')->group(function () {
     Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
     Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 });
+
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     // Authentication Routes
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login']);
+    Route::post('/login', [LoginController::class, 'login'])->name('login');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
     Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
@@ -64,11 +61,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         
-        // Profile Routes
-        Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
-        Route::put('/profile/change-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+    // Profile Routes
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/change-password', [ProfileController::class, 'showChangePasswordForm'])->name('profile.change-password');
+    Route::put('/profile/change-password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
 
         // University Routes
         Route::resource('universities', AdminUniversityController::class)->except(['show']);

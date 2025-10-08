@@ -1,4 +1,8 @@
-<x-layouts.public-layout title="Contact Us - EduConnect">
+@extends('components.layouts.public-layout')
+
+@section('title', 'Contact Us - EduConnect')
+
+@section('content')
     <!-- Contact Section -->
     <section class="py-16 sm:py-20 bg-white dark:bg-background-dark">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -27,4 +31,4 @@
             </div>
         </div>
     </section>
-</x-layouts.public-layout>
+@endsection

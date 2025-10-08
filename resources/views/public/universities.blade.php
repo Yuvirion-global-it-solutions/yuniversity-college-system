@@ -1,4 +1,9 @@
-<x-layouts.public-layout title="Universities - EduConnect">
+@extends('components.layouts.public-layout')
+
+@section('title', 'Universities - EduConnect')
+
+@section('content')
+ 
     <!-- Universities List -->
     <section class="py-16 sm:py-20">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,6 +17,7 @@
                         <div class="p-4">
                             <h3 class="font-bold text-gray-900 dark:text-white">{{ $university->name }}</h3>
                             <p class="text-sm text-gray-500 dark:text-gray-400">{{ $university->location ?? 'Location not available' }}</p>
+                         
                         </div>
                     </a>
                 @empty
@@ -24,4 +30,4 @@
             </div>
         </div>
     </section>
-</x-layouts.public-layout>
+@endsection

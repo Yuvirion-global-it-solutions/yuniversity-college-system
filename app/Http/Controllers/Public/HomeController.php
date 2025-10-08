@@ -35,7 +35,7 @@ class HomeController extends Controller
             'universities' => University::take(4)->get(),
             'colleges'     => College::take(4)->get(),
             'courses'      => Course::take(4)->get(),
-            'testimonials' => Testimonial::take(3)->get(),
+            'testimonials' => Testimonial::take(5)->get(),
         ]);
     }
 }

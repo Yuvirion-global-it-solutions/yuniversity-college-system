@@ -1,4 +1,8 @@
-<x-layouts.public-layout title="{{ $course->name }} - EduConnect">
+@extends('components.layouts.public-layout')
+
+@section('title', '{{ $course->name }} - EduConnect')
+
+@section('content')
     <!-- Hero Section -->
     <section class="relative flex min-h-[40vh] items-center justify-center bg-cover bg-center py-12 text-white" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%), url('{{ $course->image_path ?: 'https://via.placeholder.com/300' }}');">
         <div class="container mx-auto px-4 text-center">
@@ -38,4 +42,4 @@
             </div>
         </div>
     </section>
-</x-layouts.public-layout>
+@endsection

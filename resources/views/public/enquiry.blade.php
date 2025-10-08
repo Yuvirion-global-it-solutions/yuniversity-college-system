@@ -1,4 +1,8 @@
-<x-layouts.public-layout title="Enquiry - EduConnect">
+@extends('components.layouts.public-layout')
+
+@section('title', 'Enquiry - EduConnect')
+
+@section('content')
     <!-- Enquiry Section -->
     <section class="py-16 sm:py-20 bg-white dark:bg-background-dark">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,7 +52,7 @@
             </div>
         </div>
     </section>
-</x-layouts.public-layout>
+@endsection
 
 <script>
     function updateColleges() {
