@@ -7,17 +7,18 @@
     <meta name="description" content="EduConnect - Discover top universities, colleges, and courses to shape your academic future.">
     <meta name="theme-color" content="#1e1b4b">
     <meta name="robots" content="index, follow">
-    <title>{{ $title ?? 'EduConnect - Your Academic Journey Starts Here' }}</title>
+    <title>@yield('title', 'EduConnect - Your Academic Journey Starts Here')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="icon" type="image/png" href="/favicon.ico">
+    @yield('head')
     <style>
         :root {
             --primary: #c71585; /* Magenta */
             --secondary: #1e1b4b; /* Navy Blue */
-            --accent: #e6e6fa; /* Light lavender for accent */
+            --accent: #e6e6fa; /* Light lavender */
             --background-light: #f9f9f9;
             --background-dark: #1e1b4b;
             --text-light: #2d2d2d;
@@ -29,11 +30,10 @@
             background-color: var(--background-light);
             color: var(--text-light);
             margin: 0;
-            padding: 0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         body.dark {
@@ -101,6 +101,7 @@
             background: none;
             border: none;
             color: #666;
+            cursor: pointer;
             transition: color 0.3s ease;
         }
 
@@ -142,7 +143,6 @@
         footer {
             background-color: var(--secondary);
             color: var(--text-dark);
-            border-top: 1px solid #4b4b4b;
             padding: 40px 0;
         }
 
@@ -155,12 +155,11 @@
         footer a {
             color: var(--text-dark);
             text-decoration: none;
-            transition: color 0.3s ease, transform 0.3s ease;
+            transition: color 0.3s ease;
         }
 
         footer a:hover {
             color: var(--primary);
-            transform: scale(1.05);
         }
 
         .newsletter-form input {
@@ -219,13 +218,15 @@
         .delay-200 { animation-delay: 0.2s; }
         .delay-300 { animation-delay: 0.3s; }
 
-        /* Ensure no overlap on reload */
-        .container {
-            position: relative;
-            z-index: 1;
+        @keyframes blink-apply {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.85; }
         }
 
-        /* Optimize for fast loading */
+        .blink-apply {
+            animation: blink-apply 2s ease-in-out infinite;
+        }
+
         img, svg {
             max-width: 100%;
             height: auto;
@@ -236,7 +237,7 @@
                 background-color: #fff;
                 border-top: 1px solid #e0e0e0;
                 padding: 16px;
-                width: 100%;
+                gap: 8px;
             }
 
             .dark .navbar-nav {
@@ -244,8 +245,12 @@
                 border-top: 1px solid #4b4b4b;
             }
 
-            .navbar-nav .nav-link {
+            .navbar-nav .nav-link, .navbar-nav .btn-apply {
                 padding: 8px 0;
+            }
+
+            .search-container {
+                margin-bottom: 16px;
             }
         }
     </style>
@@ -253,65 +258,42 @@
 <body>
     <div class="d-flex flex-column min-vh-100">
         <!-- Header -->
-      <header>
-    <nav class="navbar navbar-expand-md">
-        <div class="container">
-            <a href="{{ route('public.home') }}" class="navbar-brand animate-slide-in">
-                <svg class="logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8z"/>
-                </svg>
-                <span class="fs-4 fw-bold" style="color: var(--primary);">EduConnect</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <div class="d-md-flex flex-grow-1 justify-content-center mx-md-4">
-                    <div class="search-container d-none d-md-block">
-                        <input type="text" placeholder="Search universities, colleges, courses..." aria-label="Search">
-                        <button>
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </button>   
+        <header>
+            <nav class="navbar navbar-expand-md">
+                <div class="container">
+                    <a href="{{ route('public.home') }}" class="navbar-brand animate-slide-in">
+                        <svg class="logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8z"/>
+                        </svg>
+                        <span class="fs-4 fw-bold" style="color: var(--primary);">EduConnect</span>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+                        </svg>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <div class="d-md-flex flex-grow-1 justify-content-center mx-md-4">
+                            <div class="search-container">
+                                <input type="text" placeholder="Search universities, colleges, courses..." aria-label="Search">
+                                <button aria-label="Search">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <ul class="navbar-nav ms-auto" style="gap: 16px;">
+                            <li class="nav-item"><a href="{{ route('public.home') }}" class="nav-link animate-slide-in">Home</a></li>
+                            <li class="nav-item"><a href="{{ route('public.universities.index') }}" class="nav-link animate-slide-in delay-100">Universities</a></li>
+                            <li class="nav-item"><a href="{{ route('public.colleges.index') }}" class="nav-link animate-slide-in delay-100">Colleges</a></li>
+                            <li class="nav-item"><a href="{{ route('public.courses.index') }}" class="nav-link animate-slide-in delay-100">Courses</a></li>
+                            <li class="nav-item"><a href="{{ route('public.enquiry.create') }}" class="btn btn-apply animate-slide-in delay-200 blink-apply">Apply Now</a></li>
+                        </ul>
                     </div>
                 </div>
-                <ul class="navbar-nav ms-auto" style="gap: 16px;">
-                    <li class="nav-item"><a href="{{ route('public.home') }}" class="nav-link animate-slide-in">Home</a></li>
-                    <li class="nav-item"><a href="{{ route('public.universities.index') }}" class="nav-link animate-slide-in delay-100">Universities</a></li>
-                    <li class="nav-item"><a href="{{ route('public.colleges.index') }}" class="nav-link animate-slide-in delay-100">Colleges</a></li>
-                    <li class="nav-item"><a href="{{ route('public.courses.index') }}" class="nav-link animate-slide-in delay-100">Courses</a></li>
-                    <li class="nav-item"><a href="{{ route('public.enquiry.create') }}" class="btn btn-apply animate-slide-in delay-200 blink-apply">Apply Now</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-
-<style>
-    /* Blinking animation for Apply Now button */
-    @keyframes blink-apply {
-        0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.05); opacity: 0.85; }
-    }
-
-    .blink-apply {
-        animation: blink-apply 2s ease-in-out infinite;
-    }
-
-    /* Adjust navbar item spacing for mobile */
-    @media (max-width: 767px) {
-        .navbar-nav {
-            gap: 8px;
-            padding: 16px;
-        }
-        .navbar-nav .nav-link, .navbar-nav .btn-apply {
-            padding: 8px 0;
-        }
-    }
-</style>
+            </nav>
+        </header>
 
         <!-- Main Content -->
         <main class="flex-grow-1">
@@ -322,12 +304,10 @@
         <footer>
             <div class="container py-5">
                 <div class="row g-4">
-                    <!-- About -->
                     <div class="col-md-3 animate-slide-in">
                         <h3>About EduConnect</h3>
                         <p class="fs-6">EduConnect connects you with top universities and courses to shape your academic future.</p>
                     </div>
-                    <!-- Quick Links -->
                     <div class="col-md-3 animate-slide-in delay-100">
                         <h3>Quick Links</h3>
                         <ul class="list-unstyled">
@@ -337,15 +317,13 @@
                             <li><a href="{{ route('public.contact.create') }}" class="fs-6">Contact</a></li>
                         </ul>
                     </div>
-                    <!-- Newsletter -->
                     <div class="col-md-3 animate-slide-in delay-200">
                         <h3>Stay Updated</h3>
-                        <div class="newsletter-form">
-                            <input type="email" placeholder="Enter your email" aria-label="Email for newsletter">
-                            <button type="button" class="mt-2">Subscribe</button>
-                        </div>
+                        <form class="newsletter-form">
+                            <input type="email" placeholder="Enter your email" aria-label="Email for newsletter" required>
+                            <button type="submit" class="mt-2">Subscribe</button>
+                        </form>
                     </div>
-                    <!-- Social Media -->
                     <div class="col-md-3 animate-slide-in delay-300">
                         <h3>Follow Us</h3>
                         <div class="social-icons d-flex gap-3">
